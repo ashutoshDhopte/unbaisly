@@ -24,4 +24,64 @@ document.getElementById("scanPageButton").addEventListener("click", function() {
         });
     });
 });
+
+const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+
+document.getElementById("listenBiasInSpeechButton").addEventListener("click", function() {
+
+    navigator.mediaDevices.getUserMedia({ audio: true })
+    .then(stream => {
+        main(stream).catch(error =>{
+            console.error('Error:', error);
+        });
+    })
+    .catch(error => {
+        console.error('Error accessing microphone:', error);
+    });
+});
+
+async function main(stream){
+
+    const audioContext = new AudioContext();
+    await audioContext.audioWorklet.addModule('audio-worklet-processor.js');
+    const sourceNode = new MediaStreamAudioSourceNode(audioContext, {
+        mediaStream: stream
+    });
+    const processorNode = new AudioWorkletNode(audioContext, 'audio-processor');
+
+    sourceNode.connect(processorNode);
+    processorNode.connect(audioContext.destination);
+
+    // recognition.interimResults = true;
+    recognition.continuous = true;
+    recognition.lang = 'en-US'; // Set the language
+
+    recognition.onresult = (event) => {
+        const transcript = event.results[event.resultIndex][0].transcript;
+        if(transcript){
+            chrome.runtime.sendMessage(null, { action: "scanSpeechBiasMetric", transcript: transcript }, null, (response) => {
+                try{
+                    if(response.data){
+                        str = '';
+                        for (const key in response.data) {
+                            if (Object.prototype.hasOwnProperty.call(response.data, key)) {
+                                const element = response.data[key];
+                                str += key+' --> '+element+'</br>';
+                            }
+                        }
+                        document.getElementById('speechBiasedMetrics').innerHTML = str;
+                    }
+                }catch(e){
+                    console.error('Error speech metric response:', e);
+                }
+            });
+        }
+    };
+
+    recognition.start();
+}
+
+document.getElementById("stopListenBiasInSpeechButton").addEventListener("click", function() {
+    recognition.stop();
+});
   

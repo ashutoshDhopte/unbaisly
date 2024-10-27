@@ -2,7 +2,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     
     if (request.action === "textSelected") {
 
-        const apiKey = ""; 
+        const apiKey = "AIzaSyBuEoKi-vBZ3tc6uGm9u32bQgetlGYn6Bg"; 
 
         fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`, {
         method: "POST",
@@ -14,7 +14,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             {
                 parts: [
                 {
-                    text: `Detect racial bias in the sentence and suggest an alternative unbiased sentence, Let your response contain only unbiased version of the sentence: ${request.text}`
+                    text: `Detect racial bias in the sentence and suggest an alternative unbiased sentence, and don't include any explaination of it, just give the unbaised version, and if unbaised version can't be generated say NA: ${request.text}`
                 },
                 ],
             },

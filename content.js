@@ -42,4 +42,18 @@ function handleInputEvent() {
 document.addEventListener('input', handleInputEvent);
 document.addEventListener('blur', handleTypingComplete, true); // 'true' for capturing phase
 
-  
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+
+  if (request.action === "scanPage") {
+
+    let textContent = document.body.textContent;
+    
+    if(textContent){
+      chrome.runtime.sendMessage({ action: "scanPageBiasMetric", text: textContent }, (response) => {
+        sendResponse(response);
+      });
+    }
+  }
+
+  return true;
+});

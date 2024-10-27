@@ -30,7 +30,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         .then((data) => {
             console.log("Response data:", data);
             let result = '';
-            if(data.candidates[0].content.parts[0]){
+            if(data.candidates && data.candidates.length > 0 && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts.length > 0 && data.candidates[0].content.parts[0]){
                 result = data.candidates[0].content.parts[0].text;
             }
             sendResponse({ action: "showSuggestion", suggestion: result, text: request.text, senderID: sender.tab.id})
@@ -40,6 +40,31 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         });
 
         return true;
+
+    }else if(request.action == 'scanPageBiasMetric'){
+        
+        fetch(`http://127.0.0.1:5000/api/baised-metric`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                data: request.text
+            }),
+            })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then((data) => {
+                sendResponse({ data: data })
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+        });
+
+        return true;
     }
-  });
-  
+});

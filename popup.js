@@ -1,8 +1,9 @@
-// chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-//     if (request.action === "pageBiasMetric" && request.data) {
-//         document.getElementById('biasedMetrics').textContent = request.data;
-//     }
-// });
+document.addEventListener('DOMContentLoaded', () => {
+    chrome.storage.local.get(['originalText', 'suggestedText'], (result) => {
+      document.getElementById('original-text').innerText = result.originalText || "No text selected.";
+      document.getElementById('suggested-text').innerText = result.suggestedText || "No suggestions available.";
+    });
+  });
 
 document.getElementById("scanPageButton").addEventListener("click", function() {
 

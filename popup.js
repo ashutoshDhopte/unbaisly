@@ -80,8 +80,4 @@ async function main(stream){
 
     recognition.start();
 }
-
-document.getElementById("stopListenBiasInSpeechButton").addEventListener("click", function() {
-    recognition.stop();
-});
   

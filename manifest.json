@@ -1,0 +1,24 @@
+{
+    "manifest_version": 3,
+    "name": "Unbiasify",
+    "version": "1.0",
+    "description": "A Chrome extension to suggest unbiased alternatives for selected text.",
+    "permissions": ["activeTab", "scripting", "storage"],
+    "background": {
+      "service_worker": "background.js"
+    },
+    "action": {
+      "default_popup": "popup.html",
+      "default_icon": {
+      }
+    },
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["content.js"]
+      }
+    ],
+    "icons": {
+    }
+  }
+  

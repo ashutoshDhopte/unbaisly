@@ -10,16 +10,22 @@ document.getElementById("scanPageButton").addEventListener("click", function() {
 
         const currentTabId = tabs[0].id;
 
+        document.getElementById('biasedMetrics').innerHTML = 'Loading...';
         chrome.tabs.sendMessage(currentTabId, {action: "scanPage"}, (response) => {
             if (response.data) {
                 let str = '';
                 for (const key in response.data) {
                     if (Object.prototype.hasOwnProperty.call(response.data, key)) {
                         const element = response.data[key];
-                        str += key+' --> '+element+'</br>';
+                        str += '<div style="padding:10px 5px 0px 0px;">'+
+                                    '<div style="width:calc(80% - 10px); float: left;">'+key+'</div>'+
+                                    '<div style="width:20%; float:right">'+element+'</div>'+
+                                '</div>';
                     }
                 }
                 document.getElementById('biasedMetrics').innerHTML = str;
+            }else{
+                document.getElementById('biasedMetrics').innerHTML = '';
             }
         });
     });
@@ -66,7 +72,10 @@ async function main(stream){
                         for (const key in response.data) {
                             if (Object.prototype.hasOwnProperty.call(response.data, key)) {
                                 const element = response.data[key];
-                                str += key+' --> '+element+'</br>';
+                                str += '<div style="padding:10px 5px 0px 0px;">'+
+                                            '<div style="width:calc(80% - 10px); float: left;">'+key+'</div>'+
+                                            '<div style="width:20%; float:right">'+element+'</div>'+
+                                        '</div>';
                             }
                         }
                         document.getElementById('speechBiasedMetrics').innerHTML = str;

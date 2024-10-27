@@ -22,6 +22,7 @@ def receive_data() -> dict:
 
     lines = data.split(".")
     result = {}
+    countMap = {}
 
     for line in lines:
         if line:
@@ -29,9 +30,10 @@ def receive_data() -> dict:
             tars.predict_zero_shot(sentence, classes)
             for obj in sentence.get_labels():
                 result[obj.value] = result.get(obj.value, 0) + obj.score
+                countMap[obj.value] = countMap.get(obj.value, 0) + 1
 
     for key, value in result.items():
-        result[key] = str(round(value*100, 2)) + "%"
+        result[key] = str(round((value/countMap[key])*100, 2)) + "%"
             
 
     return jsonify(result), 200

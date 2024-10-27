@@ -4,16 +4,16 @@
     <title>Unbiasify</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body style="width: 250px;">
+  <body style="width: 250px; height: 400px; overflow-y: auto;">
     <button id="scanPageButton">Scan the page for baised contents</button>
-    <p id="biasedMetrics"></p>
+    <div style="width:100%" id="biasedMetrics" style="padding-bottom: 10px;"></div>
 
     </br>
     </br>
     </br>
 
     <button id="listenBiasInSpeechButton">Start listening</button>
-    <p id="speechBiasedMetrics"></p>
+    <div style="width:100%" id="speechBiasedMetrics" style="padding-bottom: 10px;"></div>
 
     <script src="popup.js"></script>
   </body>

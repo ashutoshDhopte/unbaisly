@@ -9,10 +9,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
   if (request.action === "scanPage") {
 
-    let textContent = document.body.textContent;
+    const paragraphs = document.querySelectorAll('p');
+    const bodyText = Array.from(paragraphs)
+      .map(paragraph => paragraph.textContent)
+      .join(' ');
     
-    if(textContent){
-      chrome.runtime.sendMessage({ action: "scanPageBiasMetric", text: textContent }, (response) => {
+    if(bodyText){
+      chrome.runtime.sendMessage({ action: "scanPageBiasMetric", text: bodyText }, (response) => {
         sendResponse(response);
       });
     }
